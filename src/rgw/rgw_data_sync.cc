@@ -3213,7 +3213,7 @@ public:
 
         map<string, bufferlist> attrs;
         status.encode_all_attrs(attrs);
-        call(new RGWSimpleRadosWriteAttrsCR(dpp, sync_env->async_rados, sync_env->svc->sysobj,
+        call(new RGWSimpleRadosWriteAttrsCR(dpp, sync_env->store,
                                             obj, attrs, &objv_tracker, exclusive));
       }
 
@@ -4066,7 +4066,7 @@ class RGWWriteBucketShardIncSyncStatus : public RGWCoroutine {
     reenter(this) {
       sync_marker.encode_attr(attrs);
 
-      yield call(new RGWSimpleRadosWriteAttrsCR(sync_env->dpp, sync_env->async_rados, sync_env->svc->sysobj,
+      yield call(new RGWSimpleRadosWriteAttrsCR(sync_env->dpp, sync_env->store,
                                                 obj, attrs, &objv_tracker));
       if (retcode < 0) {
         return set_cr_error(retcode);
